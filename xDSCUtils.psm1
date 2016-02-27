@@ -64,6 +64,6 @@ function New-xSelfSignedDscEncryptionCertificate
     }
 
     Write-Verbose "Exporting certificate with thumbprint $($cert.Thumbprint) to $ExportFilePath"
-    Export-Certificate -Cert $cert -Type CERT -FilePath $ExportFilePath     
+    Export-Certificate -Cert $cert -Type CERT -FilePath $ExportFilePath > $null
 }
 

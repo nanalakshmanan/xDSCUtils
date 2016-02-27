@@ -46,6 +46,8 @@ Describe "New-xSelfSignedDscEncryptionCertificate tests" {
             $TempPath = [System.IO.Path]::GetTempFileName()
             $TempFile = "$TempPath.cer"
             $global:cert = New-xSelfSignedDscEncryptionCertificate -EmailAddress nanalakshmanan@gmail.com -ExportFilePath $TempFile
+            $Password = ConvertTo-SecureString -AsPlainText -string 'bar' -for
+            $Cred = New-Object System.Management.Automation.PSCredential 'foo', $Password
 
             configuration test
             {
@@ -56,6 +58,7 @@ Describe "New-xSelfSignedDscEncryptionCertificate tests" {
                     {
                         DestinationPath = "$TempPath\dest"
                         Contents = "Helo world"
+                        PsDscRunAsCredential = $cred
                     }
                 }
             }
@@ -69,7 +72,7 @@ Describe "New-xSelfSignedDscEncryptionCertificate tests" {
                 )
             }
 
-            test -outputpath ([System.IO.Path]::GetTempPath()) -ErrorVariable e
+            test -outputpath ([System.IO.Path]::GetTempPath()) -ErrorVariable e -ConfigurationData $ConfigData
             $e | should be $null
     }
 }
